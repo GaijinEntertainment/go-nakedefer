@@ -25,8 +25,6 @@ defer [-flag] [package]
 ### Example
 
 ```go
-// Package a.go
-package a
 
 // valid
 func someFuncWithValidDefer1() {

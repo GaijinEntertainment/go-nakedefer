@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.19"
+          check-latest: true
+      - uses: actions/checkout@v3
+      - uses: golangci/golangci-lint-action@v3
+
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.19"
+          check-latest: true
+      - uses: actions/checkout@v3
+      - name: "Run tests"
+        run: go test -json ./... > test.json
+      - name: "Annotate tests"
+        uses: guyarb/golang-test-annotations@v0.6.0
+        with:
+          test-results: test.json
+
+  dependabot-merge:
+    name: "Dependabot auto-merge"
+    runs-on: ubuntu-latest
+    needs: [ "lint", "test" ]
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
