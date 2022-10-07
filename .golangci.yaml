@@ -1,0 +1,21 @@
+run:
+  allow-parallel-runners: true
+
+linters:
+  enable-all: true
+  disable:
+    - varnamelen
+    - nonamedreturns
+    - gofumpt
+    - gci
+    - gofmt
+    - goimports
+    - exhaustivestruct # deprecated
+    - scopelint # deprecated
+    - golint # deprecated
+    - interfacer # deprecated
+    - maligned # deprecated
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
