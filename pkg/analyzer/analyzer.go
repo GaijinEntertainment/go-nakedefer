@@ -10,7 +10,7 @@ import (
 
 // NewAnalyzer returns a go/analysis-compatible analyzer.
 func NewAnalyzer() (*analysis.Analyzer, error) {
-	return &analysis.Analyzer{
+	return &analysis.Analyzer{ //nolint:exhaustruct
 		Name:     "defer",
 		Doc:      "Checks that defer statement defers a function that does not return a function.",
 		Run:      run,
@@ -36,6 +36,7 @@ func newVisitor(pass *analysis.Pass) func(node ast.Node) {
 		if !ok {
 			return
 		}
+
 		if deferStmt.Call == nil {
 			return
 		}
@@ -70,6 +71,7 @@ func fieldsHasFunction(fields []*ast.Field) bool {
 		if field == nil {
 			continue
 		}
+
 		if _, ok := field.Type.(*ast.FuncType); ok {
 			isFuncExist = true
 		}
