@@ -17,7 +17,7 @@ go get -u github.com/GaijinEntertainment/go-defer/cmd/defer
 ### Usage
 
 ```
-defer [-flag] [package]
+defer ./...
 
 ```
 
