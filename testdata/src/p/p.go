@@ -4,34 +4,34 @@ import (
 	"errors"
 )
 
-func funcNotReturnsAnyType() {
+func funcNotReturnAnyType() {
 }
 
-func funcReturnsErr() error {
+func funcReturnErr() error {
 	return errors.New("some error")
 }
 
-func funcReturnsFuncAndErr() (func(), error) {
+func funcReturnFuncAndErr() (func(), error) {
 	return func() {
 	}, nil
 }
 
 func funcDeferNotReturnAnyType1() {
-	defer funcNotReturnsAnyType()
+	defer funcNotReturnAnyType()
 }
 
 func funcDeferNotReturnAnyType2() {
 	defer func() {
-		_ = funcReturnsErr()
+		_ = funcReturnErr()
 	}()
 }
 
 func funcDeferReturnErr() {
-	defer funcReturnsErr() // want "deferred call should not return any type"
+	defer funcReturnErr() // want "deferred call should not return any type"
 }
 
 func funcDeferReturnErrAndFunc() {
-	defer funcReturnsFuncAndErr() // want "deferred call should not return any type"
+	defer funcReturnFuncAndErr() // want "deferred call should not return any type"
 }
 
 func funcDeferAnonymousReturnFunc() {
