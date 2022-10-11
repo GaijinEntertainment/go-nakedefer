@@ -6,7 +6,7 @@
 
 ---
 
-`defer` is a golang analyzer that finds defer functions which return a function.
+`defer` is a golang analyzer that finds defer functions which return any type.
 
 ### Installation
 
@@ -26,6 +26,13 @@ defer ./...
 
 ```go
 
+func funcNotReturnAnyType() {
+}
+
+func funcReturnErr() error {
+	return errors.New("some error")
+}
+
 // valid
 func someFuncWithValidDefer1() {
 	defer func() {
@@ -34,13 +41,23 @@ func someFuncWithValidDefer1() {
 
 // valid
 func someFuncWithValidDefer2() {
-	defer func() error {
-		return nil
-	}()
+	defer funcNotReturnAnyType()
 }
 
-// invalid, deferred call should not return a function
-func someFuncWithInvalidDefer() {
+// invalid, deferred call should not return any type
+func someFuncWithInvalidDefer1() {
+    defer func() error {
+        return nil
+    }()
+}
+
+// invalid, deferred call should not return any type
+func someFuncWithInvalidDefer2() {
+    defer funcReturnErr()
+}
+
+// invalid, deferred call should not return any type
+func someFuncWithInvalidDefer3() {
 	defer func() func() {
 		return func() {
 

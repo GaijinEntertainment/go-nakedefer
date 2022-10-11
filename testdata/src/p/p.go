@@ -1,39 +1,47 @@
 package p
 
-func funcReturnsInt() int {
-	return 1
+import (
+	"errors"
+)
+
+func funcNotReturnAnyType() {
 }
 
-func funcReturnsFunc() func() {
+func funcReturnErr() error {
+	return errors.New("some error")
+}
+
+func funcReturnFuncAndErr() (func(), error) {
 	return func() {
-	}
+	}, nil
 }
 
-func funcReturnsErrAndFunc() (error, func()) {
-	return nil, func() {
-	}
+func funcDeferNotReturnAnyType1() {
+	defer funcNotReturnAnyType()
 }
 
-func funcDeferReturnGoodValue() {
-	defer funcReturnsInt()
+func funcDeferNotReturnAnyType2() {
+	defer func() {
+		_ = funcReturnErr()
+	}()
 }
 
-func funcDeferReturnFunc() {
-	defer funcReturnsFunc() // want "deferred call should not return a function"
+func funcDeferReturnErr() {
+	defer funcReturnErr() // want "deferred call should not return any type"
 }
 
 func funcDeferReturnErrAndFunc() {
-	defer funcReturnsErrAndFunc() // want "deferred call should not return a function"
+	defer funcReturnFuncAndErr() // want "deferred call should not return any type"
 }
 
 func funcDeferAnonymousReturnFunc() {
-	defer func() func() { // want "deferred call should not return a function"
+	defer func() func() { // want "deferred call should not return any type"
 		return func() {}
 	}()
 }
 
-func funcDeferAnonymousReturnErrAndFunc() {
-	defer func() (error, func()) { // want "deferred call should not return a function"
-		return nil, func() {}
+func funcDeferAnonymousReturnIntAndErr() {
+	defer func() (int, error) { // want "deferred call should not return any type"
+		return 1, nil
 	}()
 }

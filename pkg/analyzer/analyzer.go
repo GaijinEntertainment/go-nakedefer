@@ -12,7 +12,7 @@ import (
 func NewAnalyzer() (*analysis.Analyzer, error) {
 	return &analysis.Analyzer{ //nolint:exhaustruct
 		Name:     "defer",
-		Doc:      "Checks that defer statement defers a function that does not return a function.",
+		Doc:      "Checks that defer statement defers a function that does not return any type.",
 		Run:      run,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}, nil
@@ -56,28 +56,12 @@ func newVisitor(pass *analysis.Pass) func(node ast.Node) {
 			return
 		}
 
-		if !fieldsHasFunction(outgoingFieldList.List) {
+		if len(outgoingFieldList.List) == 0 {
 			return
 		}
 
-		pass.Reportf(node.Pos(), "deferred call should not return a function")
+		pass.Reportf(node.Pos(), "deferred call should not return any type")
 	}
-}
-
-func fieldsHasFunction(fields []*ast.Field) bool {
-	isFuncExist := false
-
-	for _, field := range fields {
-		if field == nil {
-			continue
-		}
-
-		if _, ok := field.Type.(*ast.FuncType); ok {
-			isFuncExist = true
-		}
-	}
-
-	return isFuncExist
 }
 
 func getFuncDeclResults(ident *ast.Ident) *ast.FieldList {
