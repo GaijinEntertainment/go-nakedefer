@@ -12,7 +12,7 @@ import (
 func NewAnalyzer() (*analysis.Analyzer, error) {
 	return &analysis.Analyzer{ //nolint:exhaustruct
 		Name:     "defer",
-		Doc:      "Checks that defer statement defers a function that does not return any types.",
+		Doc:      "Checks that defer statement defers a function that does not return any type.",
 		Run:      run,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}, nil
