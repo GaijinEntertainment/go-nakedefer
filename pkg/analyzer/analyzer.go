@@ -12,7 +12,7 @@ import (
 func NewAnalyzer() (*analysis.Analyzer, error) {
 	return &analysis.Analyzer{ //nolint:exhaustruct
 		Name:     "defer",
-		Doc:      "Checks that defer statement defers a function that does not return any type.",
+		Doc:      "Checks that deferred call does not return anything.",
 		Run:      run,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}, nil
@@ -60,7 +60,7 @@ func newVisitor(pass *analysis.Pass) func(node ast.Node) {
 			return
 		}
 
-		pass.Reportf(node.Pos(), "deferred call should not return any type")
+		pass.Reportf(node.Pos(), "deferred call should not return anything")
 	}
 }
 

@@ -6,7 +6,7 @@
 
 ---
 
-`defer` is a golang analyzer that finds defer functions which return any type.
+`defer` is a golang analyzer that finds defer functions which return anything.
 
 ### Installation
 
