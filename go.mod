@@ -1,4 +1,4 @@
-module github.com/GaijinEntertainment/go-defer
+module github.com/GaijinEntertainment/go-nackedefer
 
 go 1.19
 
