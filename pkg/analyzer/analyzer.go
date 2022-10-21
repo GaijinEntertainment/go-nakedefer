@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	ErrEmptyPattern = errors.New("pattern can't be empty")
+	ErrEmptyExcludePattern = errors.New("pattern for excluding function can't be empty")
 )
 
 type analyzer struct {
@@ -36,7 +36,7 @@ func NewAnalyzer(exclude []string) (*analysis.Analyzer, error) {
 	}
 
 	return &analysis.Analyzer{ //nolint:exhaustruct
-		Name:     "nackedefer",
+		Name:     "nakedefer",
 		Doc:      "Checks that deferred call does not return anything.",
 		Run:      a.run,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
@@ -45,7 +45,7 @@ func NewAnalyzer(exclude []string) (*analysis.Analyzer, error) {
 }
 
 func (a *analyzer) newFlagSet() flag.FlagSet {
-	fs := flag.NewFlagSet("nackedefer flags", flag.PanicOnError)
+	fs := flag.NewFlagSet("nakedefer flags", flag.PanicOnError)
 
 	fs.Var(
 		&reListVar{values: &a.exclude},
@@ -86,19 +86,19 @@ func (a *analyzer) newVisitor(pass *analysis.Pass) func(node ast.Node) {
 			return
 		}
 
-		var isFuncReturnType bool
+		var hasReturn bool
 		switch v := deferStmt.Call.Fun.(type) {
 		case *ast.FuncLit: // function is anonymous
-			isFuncReturnType = a.isFuncLitReturnType(v)
+			hasReturn = a.isFuncLitReturnValues(v)
 		case *ast.Ident:
-			isFuncReturnType = a.isIdentReturnType(v)
+			hasReturn = a.isIdentReturnValues(v)
 		case *ast.SelectorExpr:
-			isFuncReturnType = a.isSelExprReturnType(v)
+			hasReturn = a.isSelExprReturnValues(v)
 		default:
 			return
 		}
 
-		if !isFuncReturnType {
+		if !hasReturn {
 			return
 		}
 
@@ -106,7 +106,7 @@ func (a *analyzer) newVisitor(pass *analysis.Pass) func(node ast.Node) {
 	}
 }
 
-func (a *analyzer) isIdentReturnType(ident *ast.Ident) bool {
+func (a *analyzer) isIdentReturnValues(ident *ast.Ident) bool {
 	if ident == nil || ident.Obj == nil {
 		return false
 	}
@@ -127,7 +127,7 @@ func (a *analyzer) isIdentReturnType(ident *ast.Ident) bool {
 	return true
 }
 
-func (a *analyzer) isFuncLitReturnType(funcLit *ast.FuncLit) bool {
+func (a *analyzer) isFuncLitReturnValues(funcLit *ast.FuncLit) bool {
 	if funcLit == nil || funcLit.Type == nil {
 		return false
 	}
@@ -143,7 +143,7 @@ func (a *analyzer) isFuncLitReturnType(funcLit *ast.FuncLit) bool {
 	return true
 }
 
-func (a *analyzer) isSelExprReturnType(selExpr *ast.SelectorExpr) bool {
+func (a *analyzer) isSelExprReturnValues(selExpr *ast.SelectorExpr) bool {
 	if selExpr == nil {
 		return false
 	}

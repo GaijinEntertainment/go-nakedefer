@@ -56,7 +56,7 @@ func (v *reListVar) String() string {
 
 func strToRegexp(str string) (*regexp.Regexp, error) {
 	if str == "" {
-		return nil, ErrEmptyPattern
+		return nil, ErrEmptyExcludePattern
 	}
 
 	re, err := regexp.Compile(str)

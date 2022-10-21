@@ -6,18 +6,18 @@
 
 ---
 
-`nackedefer` is a golang analyzer that finds defer functions which return anything.
+`nakedefer` is a golang analyzer that finds defer functions which return anything.
 
 ### Installation
 
 ```shell
-go get -u github.com/GaijinEntertainment/go-nackedefer/cmd/nackedefer
+go get -u github.com/GaijinEntertainment/go-nakedefer/cmd/nakedefer
 ```
 
 ### Usage
 
 ```
-nackedefer [-flag] [package]
+nakedefer [-flag] [package]
 
 Flags:
   -e value

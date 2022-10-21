@@ -3,7 +3,7 @@ package main
 import (
 	"golang.org/x/tools/go/analysis/singlechecker"
 
-	"github.com/GaijinEntertainment/go-nackedefer/pkg/analyzer"
+	"github.com/GaijinEntertainment/go-nakedefer/pkg/analyzer"
 )
 
 func main() {
